@@ -10,10 +10,10 @@ class MetaDataParser():
     def __init__(self, replay_file_dir):
         self.replay_file_dir = replay_file_dir
 
-    def get_raw_metadata(self):
+    def get_raw_metadata(self, replay_file_name):
         # TODO dynamically set replay file name
 
-        with open(self.replay_file_dir, "rb") as file_obj:
+        with open(os.path.join(self.replay_file_dir, replay_file_name), "rb") as file_obj:
             file_obj.seek(262)
             length_field_buffer = file_obj.read(26)
             metadata_offset = length_field_buffer[6:10]
@@ -32,7 +32,7 @@ class MetaDataParser():
 
             return player_stats
 
-    def parse(self, *args):
+    def parse(self, replay_file_name, *args):
         """
         Parse the metadata of a single .rofl file
         returns (game length, player stats)
@@ -40,7 +40,7 @@ class MetaDataParser():
         player stat key defaults to
         ['NAME', 'SKIN', 'TEAM', INDIVIDUAL_POSITION', 'WIN']
         """
-        player_stats = self.get_raw_metadata()
+        player_stats = self.get_raw_metadata(replay_file_name)
         metadata_keys = ['NAME', 'SKIN', 'TEAM',
                          'INDIVIDUAL_POSITION', 'WIN'] if not args else args
 

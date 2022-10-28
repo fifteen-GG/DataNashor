@@ -8,9 +8,9 @@ class ReplayClient():
     Opens a League of Legends client and returns a process object
     """
 
-    def __init__(self, game_dir, replay_dir, replay_file_name):
+    def __init__(self, game_dir, replay_file_dir, replay_file_name):
         self.game_dir = game_dir
-        self.replay_dir = replay_dir
+        self.replay_dir = replay_file_dir
         self.replay_file_name = replay_file_name
 
     def run_client(self):

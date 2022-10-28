@@ -7,7 +7,6 @@ def calc_gold(replay_data_dir, item_data_dir):
     with open(item_data_dir, encoding='UTF-8') as src:
         item_dict = json.load(src)
 
-    item_list = []
     gold = 0
     count = 0
 
