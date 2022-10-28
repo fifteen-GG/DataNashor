@@ -6,7 +6,7 @@ with open('README.md', 'r') as readme:
 
 setuptools.setup(
     name='datanashor',
-    version='0.1.0',
+    version='0.1.1',
     author='James Jung',
     author_email='therealjamesjung@gmail.com',
     description='League of Legends live replay parser',
