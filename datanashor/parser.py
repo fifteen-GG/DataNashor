@@ -1,13 +1,16 @@
-from utils.calc_gold import calc_gold
-from metadata import MetaDataParser
-from client import ReplayClient
 import os
 import requests
 import json
+import serial
+
+from datanashor.utils.calc_gold import calc_gold
+from datanashor.metadata import MetaDataParser
+from datanashor.client import ReplayClient
+from datanashor.utils.send_serial import send_serial
+
 from time import sleep
 
 from requests.packages import urllib3
-from utils.send_serial import send_serial
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -19,8 +22,8 @@ class ReplayParser():
     """
     Replay Parser class for parsing League of Legends replay files (.rofl)
 
-    replay_file_dir: Directory of League of Legends replay files. Defaults to C:\Users\username\Documents\League of Legends\Replays
-    game_dir: Directory of League of Legends game files. Defaults to C:\Riot Games\League of Legends
+    replay_file_dir: Directory of League of Legends replay files. Defaults to C:/Users/username/Documents/League of Legends/Replays
+    game_dir: Directory of League of Legends game files. Defaults to C:/Riot Games/League of Legends
     interval: Interval between each request to the Live Client Data API. Defaults to 0.8 seconds
     player_data_keys: Keys to parse from Live Client Data API. Defaults to ['summonerName', 'championName', 'isDead', 'level', 'scores', 'items', 'team']
     """
@@ -58,7 +61,7 @@ class ReplayParser():
             client = ReplayClient(
                 game_dir=self.game_dir,
                 replay_file_dir=self.replay_file_dir,
-                replay_file=replay_file)
+                replay_file_name=replay_file)
 
             client.run_client()
 
@@ -92,8 +95,11 @@ class ReplayParser():
                                  for key in self.player_data_keys}
                                 for champ in player_data
                             ]}
-                        if 0 < game_time < 30:
-                            send_serial('COM7')
+                        try:
+                            if 0 < game_time < 30:
+                                send_serial('COM7')
+                        except serial.serialutil.SerialException:
+                            pass
 
                         for player in current_timestamp['player_data']:
                             player['items'] = [
@@ -138,7 +144,7 @@ class ReplayParser():
                 replay_file.split('.')[0] + '.json'
             with open(result_data_filename, 'w', encoding='UTF-8') as file:
                 json.dump(result, file, ensure_ascii=False)
-            calc_gold(result_data_filename, 'resources/item.json')
+            calc_gold(result_data_filename, 'datanashor/resources/item.json')
 
             sleep(10)
 

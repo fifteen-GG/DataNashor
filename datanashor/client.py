@@ -16,7 +16,7 @@ class ReplayClient():
     def run_client(self):
         process = subprocess.Popen(
             [
-                self.game_dir + '/Game/League of Legends.exe',
+                self.game_dir + '\\Game\\League of Legends.exe',
                 os.path.join(self.replay_dir, self.replay_file_name),
                 '-GameBaseDir=' + self.game_dir,
                 '-Region=KR',  # TODO set region dynamically
