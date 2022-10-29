@@ -1,11 +1,17 @@
 import json
+from datanashor.utils.item_patch_parser import item_patch_parser
 
 
 def calc_gold(replay_data_dir, item_data_dir):
     with open(replay_data_dir, encoding='UTF-8') as src:
         source = json.load(src)
-    with open(item_data_dir, encoding='UTF-8') as src:
-        item_dict = json.load(src)
+    try:
+        with open(item_data_dir, encoding='UTF-8') as src:
+            item_dict = json.load(src)
+    except FileNotFoundError:
+        item_patch_parser(item_data_dir)
+        with open(item_data_dir, encoding='UTF-8') as src:
+            item_dict = json.load(src)
 
     gold = 0
     count = 0

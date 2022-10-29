@@ -1,7 +1,4 @@
-from errno import EL
 import json
-from logging import exception
-from tkinter import E
 import requests
 from bs4 import BeautifulSoup
 
