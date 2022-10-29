@@ -6,7 +6,7 @@ with open('README.md', 'r') as readme:
 
 setuptools.setup(
     name='datanashor',
-    version='0.1.1',
+    version='0.2.1',
     author='James Jung',
     author_email='therealjamesjung@gmail.com',
     description='League of Legends live replay parser',
@@ -17,6 +17,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     keyword=['League of Legends', 'Replay', 'Parser', 'League',
              'Lol', 'Lolreplay', 'Lolreplayparser', 'Lolreplayparser', 'DataNashor', 'datanashor'],
+    dependencies=['requests', 'beautifulsoup4', 'pyserial'],
     classifiers=[
         'Intended Audience :: Developers',
         'Programming Language :: Python :: 3',
