@@ -42,7 +42,8 @@ class ReplayParser():
                 'scores',
                 'items',
                 'team',
-            ]):
+            ],
+            serial_port=None):
 
         self.replay_file_dir = replay_file_dir
         self.game_dir = game_dir
@@ -50,6 +51,7 @@ class ReplayParser():
         self.replay_files = os.listdir(replay_file_dir)
         self.metadata = MetaDataParser(replay_file_dir)
         self.player_data_keys = player_data_keys
+        self.serial_port = serial_port
 
     def parse(self):
         """
@@ -97,7 +99,7 @@ class ReplayParser():
                             ]}
                         try:
                             if 0 < game_time < 30:
-                                send_serial('COM7')
+                                send_serial(self.serial_port)
                         except serial.serialutil.SerialException:
                             pass
 
@@ -144,7 +146,7 @@ class ReplayParser():
                 replay_file.split('.')[0] + '.json'
             with open(result_data_filename, 'w', encoding='UTF-8') as file:
                 json.dump(result, file, ensure_ascii=False)
-            calc_gold(result_data_filename, 'datanashor/resources/item.json')
+            calc_gold(result_data_filename, 'item.json')
 
             sleep(10)
 
