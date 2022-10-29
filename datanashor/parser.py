@@ -26,6 +26,8 @@ class ReplayParser():
     game_dir: Directory of League of Legends game files. Defaults to C:/Riot Games/League of Legends
     interval: Interval between each request to the Live Client Data API. Defaults to 0.8 seconds
     player_data_keys: Keys to parse from Live Client Data API. Defaults to ['summonerName', 'championName', 'isDead', 'level', 'scores', 'items', 'team']
+    serial_port: Serial port for sending data to Arduino. Defaults to None
+    delete: Delete replay files after parsing. Defaults to True
     """
 
     def __init__(
@@ -43,7 +45,8 @@ class ReplayParser():
                 'items',
                 'team',
             ],
-            serial_port=None):
+            serial_port=None,
+            delete=True):
 
         self.replay_file_dir = replay_file_dir
         self.game_dir = game_dir
@@ -52,6 +55,7 @@ class ReplayParser():
         self.metadata = MetaDataParser(replay_file_dir)
         self.player_data_keys = player_data_keys
         self.serial_port = serial_port
+        self.delete = delete
 
     def parse(self):
         """
@@ -147,6 +151,9 @@ class ReplayParser():
             with open(result_data_filename, 'w', encoding='UTF-8') as file:
                 json.dump(result, file, ensure_ascii=False)
             calc_gold(result_data_filename, 'item.json')
+
+            if self.delete:
+                os.remove(os.path.join(self.replay_file_dir, replay_file))
 
             sleep(10)
 
