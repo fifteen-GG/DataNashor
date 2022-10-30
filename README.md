@@ -16,7 +16,7 @@ DataNashor parses live data from League Client using Riot's official [Live Clien
 
 ## Getting Started
 ```Python
-from DataNashor.parser import ReplayParser
+from datanashor.parser import ReplayParser
 
 parser = ReplayParser()
 parser.parse()
