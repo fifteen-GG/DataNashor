@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "77c5e7abe109f960adae66f3a2831a6e311065c5eea9107efd59bd645dd11d92"
+            "sha256": "4167bf9cf4e6f899bd94ea80c476aa8ed6c325c3104aecb7428a888566fb72c6"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -111,6 +111,13 @@
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5'",
             "version": "==1.8.3"
         },
+        "pygetwindow": {
+            "hashes": [
+                "sha256:17894355e7d2b305cd832d717708384017c1698a90ce24f6f7fbf0242dd0a688"
+            ],
+            "index": "pypi",
+            "version": "==0.0.9"
+        },
         "pygments": {
             "hashes": [
                 "sha256:56a8508ae95f98e2b9bdf93a6be5ae3f7d8af858b43e02c5a2ff083726be40c1",
@@ -118,6 +125,12 @@
             ],
             "markers": "python_version >= '3.6'",
             "version": "==2.13.0"
+        },
+        "pyrect": {
+            "hashes": [
+                "sha256:f65155f6df9b929b67caffbd57c0947c5ae5449d3b580d178074bffb47a09b78"
+            ],
+            "version": "==0.2.0"
         },
         "pyserial": {
             "hashes": [
