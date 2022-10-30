@@ -1,3 +1,4 @@
+import base64
 import os
 import requests
 import json
@@ -175,6 +176,7 @@ class ReplayParser():
         except FileNotFoundError:
             raise FileNotFoundError(
                 'lockfile not found. Is the client running?')
+
 
 def main():
     parser = ReplayParser()
