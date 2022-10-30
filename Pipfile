@@ -10,7 +10,6 @@ wheel = "*"
 twine = "*"
 pyserial = "*"
 beautifulsoup4 = "*"
-pygetwindow = "*"
 
 [dev-packages]
 autopep8 = "*"
