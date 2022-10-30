@@ -11,6 +11,7 @@ from datanashor.utils.send_serial import send_serial
 from time import sleep
 
 from requests.packages import urllib3
+import pygetwindow as gw
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -92,6 +93,8 @@ class ReplayParser():
 
                     if not loaded:
                         loaded = True
+                        gw.getWindowsWithTitle(
+                            'League of Legends (TM) Client')[0].maximize()
 
                     try:
                         current_timestamp = {
