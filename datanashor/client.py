@@ -1,3 +1,4 @@
+import base64
 import subprocess
 import os
 
@@ -36,3 +37,22 @@ class ReplayClient():
         )
 
         return process
+
+    def get_client_metadata(self):
+        '''
+        Returns the client metadata.
+        League of Legends client must be running.
+        NOTE: by client, it does not means the replay client, but the actual game client.
+        '''
+        try:
+            raw_metadata = open(self.game_dir + '\\lockfile',
+                                'r').read().split(':')
+            metadata = {
+                "port": raw_metadata[2],
+                "token": str(base64.b64encode(f'riot:{raw_metadata[3]}'.encode('utf-8')), encoding='utf-8'),
+            }
+
+            return metadata
+        except FileNotFoundError:
+            raise FileNotFoundError(
+                'lockfile not found. Is the client running?')
