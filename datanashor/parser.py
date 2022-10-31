@@ -49,7 +49,8 @@ class ReplayParser():
             ],
             serial_port=None,
             delete=True,
-            train=True
+            train=True,
+            train_api_root=None,
     ):
 
         self.replay_file_dir = replay_file_dir
@@ -61,6 +62,11 @@ class ReplayParser():
         self.serial_port = serial_port
         self.delete = delete
         self.train = train
+        self.train_api_root = train_api_root
+
+        if train and not train_api_root:
+            raise ValueError(
+                'train_api_root must be specified if train is true.')
 
     def parse(self):
         """
@@ -162,7 +168,7 @@ class ReplayParser():
                 result_file = open(result_data_filename, 'rb')
                 meta_file = open(metadata_filename, 'rb')
 
-                requests.post(GG_API_ROOT + 'train_game/uploadJson', files={
+                requests.post(self.train_api_root + 'train_game/uploadJson', files={
                     'result_file': result_file,
                     'meta_file': meta_file
                 })
