@@ -17,6 +17,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 LIVE_CLIENT_DATA_API_ROOT = 'https://127.0.0.1:2999/liveclientdata/'
+GG_API_ROOT = 'http://3.38.169.77:8000/api/v1/'
 
 
 class ReplayParser():
@@ -47,7 +48,9 @@ class ReplayParser():
                 'team',
             ],
             serial_port=None,
-            delete=True):
+            delete=True,
+            train=True
+    ):
 
         self.replay_file_dir = replay_file_dir
         self.game_dir = game_dir
@@ -57,6 +60,7 @@ class ReplayParser():
         self.player_data_keys = player_data_keys
         self.serial_port = serial_port
         self.delete = delete
+        self.train = train
 
     def parse(self):
         """
@@ -153,6 +157,19 @@ class ReplayParser():
             with open(result_data_filename, 'w', encoding='UTF-8') as file:
                 json.dump(result, file, ensure_ascii=False)
             calc_gold(result_data_filename, 'item.json')
+
+            if self.train:
+                result_file = open(result_data_filename, 'rb')
+                meta_file = open(metadata_filename, 'rb')
+
+                requests.post(GG_API_ROOT + 'train_game/uploadJson', files={
+                    'result_file': result_file,
+                    'meta_file': meta_file
+                })
+                result_file.close()
+                meta_file.close()
+                os.remove(result_data_filename)
+                os.remove(metadata_filename)
 
             if self.delete:
                 os.remove(os.path.join(
