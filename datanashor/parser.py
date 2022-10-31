@@ -62,13 +62,13 @@ class ReplayParser():
         """
         Parse all replay files in the replay_file_dir directory
         """
-        for replay_file in self.replay_files:
-            print(f'Parsing {replay_file}')
+        while True:
+            print(f'Parsing {self.replay_files[0]}')
 
             client = ReplayClient(
                 game_dir=self.game_dir,
                 replay_file_dir=self.replay_file_dir,
-                replay_file_name=replay_file)
+                replay_file_name=self.replay_files[0])
 
             client.run_client()
 
@@ -77,9 +77,10 @@ class ReplayParser():
             game_time_count = 0
             prev_game_time = 0
 
-            game_meta_data = self.metadata.parse(replay_file)
+            game_meta_data = self.metadata.parse(self.replay_files[0])
 
-            metadata_filename = 'meta' + replay_file.split('.')[0] + '.json'
+            metadata_filename = 'meta' + \
+                self.replay_files[0].split('.')[0] + '.json'
             with open(metadata_filename, 'w', encoding='UTF-8') as fp:
                 json.dump(game_meta_data, fp, ensure_ascii=False)
 
@@ -148,15 +149,20 @@ class ReplayParser():
                 sleep(self.interval)
 
             result_data_filename = 'result' + \
-                replay_file.split('.')[0] + '.json'
+                self.replay_files[0].split('.')[0] + '.json'
             with open(result_data_filename, 'w', encoding='UTF-8') as file:
                 json.dump(result, file, ensure_ascii=False)
             calc_gold(result_data_filename, 'item.json')
 
             if self.delete:
-                os.remove(os.path.join(self.replay_file_dir, replay_file))
-
+                os.remove(os.path.join(
+                    self.replay_file_dir, self.replay_files[0]))
+                self.replay_files = os.listdir(self.replay_file_dir)
             sleep(10)
+
+            if not self.replay_files:
+                print('There are no more replay files left to parse.')
+                break
 
     def get_client_metadata(self):
         '''
