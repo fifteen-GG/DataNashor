@@ -79,7 +79,7 @@ class ReplayParser():
 
             game_meta_data = self.metadata.parse(replay_file)
 
-            metadata_filename = 'meta' + replay_file.split('.')[0] + '.json'
+            metadata_filename = 'meta_' + replay_file.split('.')[0] + '.json'
             with open(metadata_filename, 'w', encoding='UTF-8') as fp:
                 json.dump(game_meta_data, fp, ensure_ascii=False)
 
@@ -147,7 +147,7 @@ class ReplayParser():
                         break
                 sleep(self.interval)
 
-            result_data_filename = 'result' + \
+            result_data_filename = 'result_' + \
                 replay_file.split('.')[0] + '.json'
             with open(result_data_filename, 'w', encoding='UTF-8') as file:
                 json.dump(result, file, ensure_ascii=False)
