@@ -168,7 +168,7 @@ class ReplayParser():
                 result_file = open(result_data_filename, 'rb')
                 meta_file = open(metadata_filename, 'rb')
 
-                requests.post(self.train_api_root + 'train_game/uploadJson', files={
+                requests.post(self.train_api_root, files={
                     'result_file': result_file,
                     'meta_file': meta_file
                 })
