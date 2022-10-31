@@ -158,6 +158,8 @@ class ReplayParser():
                 os.remove(os.path.join(
                     self.replay_file_dir, self.replay_files[0]))
                 self.replay_files = os.listdir(self.replay_file_dir)
+            else:
+                del self.replay_files[0]
             sleep(10)
 
             if not self.replay_files:
