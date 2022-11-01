@@ -30,7 +30,7 @@ League of Legends Client MUST be running.
 ```Python
 from datanashor.parser import ReplayParser
 
-parser = ReplayParser()
+parser = ReplayParser(current_game_version='12.20')
 parser.get_client_metadata()
 ```
 
