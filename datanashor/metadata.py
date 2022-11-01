@@ -29,8 +29,8 @@ class MetaDataParser():
             replay_metadata = json.loads(
                 str(replay_metadata, encoding="utf-8"))
             player_stats = json.loads(replay_metadata["statsJson"])
-
-            return player_stats
+            game_version = replay_metadata['gameVersion']
+            return player_stats, game_version
 
     def parse(self, replay_file_name, *args):
         """
@@ -40,11 +40,11 @@ class MetaDataParser():
         player stat key defaults to
         ['NAME', 'SKIN', 'TEAM', INDIVIDUAL_POSITION', 'WIN']
         """
-        player_stats = self.get_raw_metadata(replay_file_name)
+        player_stats, game_version = self.get_raw_metadata(replay_file_name)
         metadata_keys = ['NAME', 'SKIN', 'TEAM',
                          'INDIVIDUAL_POSITION', 'WIN'] if not args else args
 
         result = [{key: stat.get(key)
                   for key in metadata_keys} for stat in player_stats]
 
-        return result
+        return result, game_version
