@@ -30,6 +30,7 @@ class ReplayParser():
     player_data_keys: Keys to parse from Live Client Data API. Defaults to ['summonerName', 'championName', 'isDead', 'level', 'scores', 'items', 'team']
     serial_port: Serial port for sending data to Arduino. Defaults to None
     delete: Delete replay files after parsing. Defaults to True
+    current_game_version: Current game version. Defaults to None. ex) '12.20'
     """
 
     def __init__(
@@ -49,8 +50,9 @@ class ReplayParser():
             ],
             serial_port=None,
             delete=True,
-            train=True,
+            train=False,
             train_api_root=None,
+            current_game_version=None,
     ):
 
         self.replay_file_dir = replay_file_dir
@@ -63,16 +65,38 @@ class ReplayParser():
         self.delete = delete
         self.train = train
         self.train_api_root = train_api_root
+        self.game_version = current_game_version
 
         if train and not train_api_root:
             raise ValueError(
                 'train_api_root must be specified if train is true.')
+        if not current_game_version:
+            raise ValueError(
+                'you must specify the current game version. ex) 12.20')
 
     def parse(self):
         """
         Parse all replay files in the replay_file_dir directory
         """
         while True:
+            try:
+                game_meta_data, game_version = self.metadata.parse(
+                    self.replay_files[0])
+            except IndexError:
+                print('There are no more replay files left to parse.')
+                break
+
+            if game_version[:5] != self.game_version:
+                print(
+                    f'{self.replay_files[0]} file\'s game version is {game_version[:5]}. Skipping...')
+                if self.delete:
+                    os.remove(os.path.join(
+                        self.replay_file_dir, self.replay_files[0]))
+                    self.replay_files = os.listdir(self.replay_file_dir)
+                else:
+                    del self.replay_files[0]
+                continue
+
             print(f'Parsing {self.replay_files[0]}')
 
             client = ReplayClient(
@@ -86,8 +110,6 @@ class ReplayParser():
             loaded = False
             game_time_count = 0
             prev_game_time = 0
-
-            game_meta_data = self.metadata.parse(self.replay_files[0])
 
             metadata_filename = 'meta_' + \
                 self.replay_files[0].split('.')[0] + '.json'
