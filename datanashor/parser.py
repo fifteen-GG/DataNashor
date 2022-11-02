@@ -3,7 +3,6 @@ import os
 import requests
 import json
 import serial
-from requests.adapters import HTTPAdapter, Retry
 from requests.packages import urllib3
 
 from datanashor.utils.calc_gold import calc_gold
@@ -189,15 +188,7 @@ class ReplayParser():
             if self.train:
                 result_file = open(result_data_filename, 'rb')
                 meta_file = open(metadata_filename, 'rb')
-
-                s = requests.Session()
-
-                retries = Retry(total=10,
-                                backoff_factor=1,
-                                status_forcelist=[400, 404, 500, 502, 503, 504])
-                s.mount('http://', HTTPAdapter(max_retries=retries))
-
-                s.post(self.train_api_root, files={
+                requests.post(self.train_api_root, files={
                     'result_file': result_file,
                     'meta_file': meta_file
                 })
