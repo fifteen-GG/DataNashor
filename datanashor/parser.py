@@ -3,6 +3,8 @@ import os
 import requests
 import json
 import serial
+from requests.adapters import HTTPAdapter, Retry
+from requests.packages import urllib3
 
 from datanashor.utils.calc_gold import calc_gold
 from datanashor.metadata import MetaDataParser
@@ -11,13 +13,11 @@ from datanashor.utils.send_serial import send_serial
 
 from time import sleep
 
-from requests.packages import urllib3
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 LIVE_CLIENT_DATA_API_ROOT = 'https://127.0.0.1:2999/liveclientdata/'
-GG_API_ROOT = 'http://3.38.169.77:8000/api/v1/'
 
 
 class ReplayParser():
@@ -190,7 +190,14 @@ class ReplayParser():
                 result_file = open(result_data_filename, 'rb')
                 meta_file = open(metadata_filename, 'rb')
 
-                requests.post(self.train_api_root, files={
+                s = requests.Session()
+
+                retries = Retry(total=10,
+                                backoff_factor=1,
+                                status_forcelist=[400, 404, 500, 502, 503, 504])
+                s.mount('http://', HTTPAdapter(max_retries=retries))
+
+                s.post(self.train_api_root, files={
                     'result_file': result_file,
                     'meta_file': meta_file
                 })
